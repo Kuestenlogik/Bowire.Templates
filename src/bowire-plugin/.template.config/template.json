@@ -1,0 +1,181 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Kuestenlogik",
+  "classifications": [ "Bowire", "Plugin", "Library" ],
+  "identity": "Kuestenlogik.Bowire.Templates.Plugin",
+  "name": "Bowire Protocol Plugin",
+  "description": "A scaffold for a Bowire protocol plugin that implements IBowireProtocol and ships as a NuGet package of type BowirePlugin.",
+  "shortName": "bowire-plugin",
+  "tags": {
+    "language": "C#",
+    "type": "project"
+  },
+  "sourceName": "Bowire.Plugin1",
+  "preferNameDirectory": true,
+  "defaultName": "Bowire.Plugin1",
+  "symbols": {
+    "DisplayName": {
+      "type": "parameter",
+      "datatype": "string",
+      "defaultValue": "My Protocol",
+      "replaces": "MY_PROTOCOL_DISPLAY_NAME",
+      "description": "Human-readable name shown on the Bowire protocol tab (e.g. \"gRPC\", \"MQTT\")."
+    },
+    "ProtocolId": {
+      "type": "parameter",
+      "datatype": "string",
+      "defaultValue": "myproto",
+      "description": "Short identifier used by Bowire internally. Lowercased and stripped to [a-z0-9_-] automatically, so \"My Proto!\" becomes \"myproto\"."
+    },
+    "ProtocolIdLower": {
+      "type": "generated",
+      "generator": "casing",
+      "parameters": {
+        "source": "ProtocolId",
+        "toLower": true
+      }
+    },
+    "ProtocolIdClean": {
+      "type": "generated",
+      "generator": "regex",
+      "dataType": "string",
+      "replaces": "MY_PROTOCOL_ID",
+      "parameters": {
+        "source": "ProtocolIdLower",
+        "steps": [
+          { "regex": "[^a-z0-9_-]", "replacement": "" }
+        ]
+      }
+    },
+    "PluginClassName": {
+      "type": "parameter",
+      "datatype": "string",
+      "defaultValue": "MyProtocol",
+      "fileRename": "MyProtocol",
+      "replaces": "MyProtocol",
+      "description": "C# class name that implements IBowireProtocol."
+    },
+    "IconSvg": {
+      "type": "parameter",
+      "datatype": "string",
+      "defaultValue": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" width=\"16\" height=\"16\"><circle cx=\"12\" cy=\"12\" r=\"10\"/></svg>",
+      "replaces": "ICON_SVG_PLACEHOLDER",
+      "description": "Raw SVG markup embedded in the generated IconSvg property and shown on the Bowire protocol tab. Pass your own <svg>...</svg> string to skip the default circle demo."
+    },
+    "Author": {
+      "type": "parameter",
+      "datatype": "string",
+      "defaultValue": "Plugin Author",
+      "replaces": "MY_AUTHOR",
+      "description": "NuGet package Authors field. NuGet emits a warning on an empty value, so we default to a placeholder you should overwrite."
+    },
+    "Company": {
+      "type": "parameter",
+      "datatype": "string",
+      "defaultValue": "Plugin Author",
+      "replaces": "MY_COMPANY",
+      "description": "NuGet package Company field."
+    },
+    "Preset": {
+      "type": "parameter",
+      "datatype": "choice",
+      "defaultValue": "none",
+      "choices": [
+        { "choice": "none",      "description": "Generic DemoService.Echo skeleton (default)." },
+        { "choice": "rest",      "description": "REST / OpenAPI — HttpClient fetch with an OpenAPI discovery stub." },
+        { "choice": "mqtt",      "description": "MQTT — MQTTnet subscribe/publish skeleton." },
+        { "choice": "websocket", "description": "WebSocket — ClientWebSocket connect/send/receive skeleton." },
+        { "choice": "grpc",      "description": "gRPC — Grpc.Net.Client GrpcChannel skeleton (add Server Reflection or a generated client for real invokes)." },
+        { "choice": "signalr",   "description": "SignalR — Microsoft.AspNetCore.SignalR.Client HubConnection skeleton." }
+      ],
+      "description": "Seed DiscoverAsync / InvokeAsync with a realistic starting point for a specific transport. \"none\" keeps the generic Echo demo."
+    },
+    "BowireSdkVersion": {
+      "type": "parameter",
+      "datatype": "string",
+      "defaultValue": "0.9.*",
+      "replaces": "MY_BOWIRE_VERSION",
+      "description": "Version range of the Kuestenlogik.Bowire NuGet package (the Bowire SDK) this plugin references."
+    },
+    "IncludeCI": {
+      "type": "parameter",
+      "datatype": "bool",
+      "defaultValue": "true",
+      "description": "Include a GitHub Actions workflow that builds, tests and packs the plugin."
+    },
+    "IncludeDuplexChannel": {
+      "type": "parameter",
+      "datatype": "bool",
+      "defaultValue": "false",
+      "description": "Scaffold a full IBowireChannel echo demo for bidirectional / duplex protocols (WebSocket, SignalR, MQTT, ...)."
+    },
+    "IncludeIntegrationTests": {
+      "type": "parameter",
+      "datatype": "bool",
+      "defaultValue": "false",
+      "description": "Scaffold a second test project that hosts the plugin inside an ASP.NET Core TestServer (AddBowire + MapBowire) and hits /bowire/api/protocols over HTTP."
+    },
+    "ProjectOnly": {
+      "type": "parameter",
+      "datatype": "bool",
+      "defaultValue": "false",
+      "description": "Emit only src/ and tests/ — skip .slnx, Directory.Build.props, Directory.Packages.props, .gitignore, README and .github. Use when adding the plugin to an existing monorepo that already provides these."
+    },
+    "Minimal": {
+      "type": "parameter",
+      "datatype": "bool",
+      "defaultValue": "false",
+      "description": "Shortcut for --ProjectOnly true --IncludeCI false --IncludeIntegrationTests false. Produces the smallest possible plugin: two csprojs (plugin + unit tests), no solution, no build-props, no CI, no integration tests."
+    },
+    "skipRestore": {
+      "type": "parameter",
+      "datatype": "bool",
+      "defaultValue": "false",
+      "description": "If specified, skips the automatic restore of the project on create."
+    }
+  },
+  "sources": [
+    {
+      "source": "./",
+      "target": "./",
+      "modifiers": [
+        {
+          "condition": "(!IncludeCI || Minimal)",
+          "exclude": [ ".github/**" ]
+        },
+        {
+          "condition": "(!IncludeDuplexChannel)",
+          "exclude": [ "src/Bowire.Plugin1/MyProtocolChannel.cs" ]
+        },
+        {
+          "condition": "(ProjectOnly || Minimal)",
+          "exclude": [
+            "Bowire.Plugin1.slnx",
+            "Directory.Build.props",
+            "Directory.Packages.props",
+            ".gitignore",
+            "README.md",
+            ".github/**"
+          ]
+        },
+        {
+          "condition": "(!IncludeIntegrationTests || Minimal)",
+          "exclude": [ "tests/Bowire.Plugin1.IntegrationTests/**" ]
+        }
+      ]
+    }
+  ],
+  "primaryOutputs": [
+    { "path": "src/Bowire.Plugin1/Bowire.Plugin1.csproj" },
+    { "path": "tests/Bowire.Plugin1.Tests/Bowire.Plugin1.Tests.csproj" }
+  ],
+  "postActions": [
+    {
+      "condition": "(!skipRestore)",
+      "description": "Restore NuGet packages required by this project.",
+      "manualInstructions": [ { "text": "Run `dotnet restore`" } ],
+      "actionId": "210D431B-A78B-4D2F-B762-4ED3E3EA9025",
+      "continueOnError": true
+    }
+  ]
+}

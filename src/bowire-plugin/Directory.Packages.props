@@ -1,0 +1,27 @@
+<Project>
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <!-- Allow MY_BOWIRE_VERSION (default "0.9.*") to be a floating
+         range — without this, CPM rejects any version containing '*'
+         with NU1011. -->
+    <CentralPackageFloatingVersionsEnabled>true</CentralPackageFloatingVersionsEnabled>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageVersion Include="Kuestenlogik.Bowire" Version="MY_BOWIRE_VERSION" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.5.1" />
+    <PackageVersion Include="xunit.v3" Version="3.2.2" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.5" />
+    <!--#if (IncludeIntegrationTests) -->
+    <PackageVersion Include="Microsoft.AspNetCore.TestHost" Version="10.0.7" />
+    <!--#endif -->
+    <!--#if (Preset == "mqtt") -->
+    <PackageVersion Include="MQTTnet" Version="5.1.0.1559" />
+    <!--#endif -->
+    <!--#if (Preset == "grpc") -->
+    <PackageVersion Include="Grpc.Net.Client" Version="2.80.0" />
+    <!--#endif -->
+    <!--#if (Preset == "signalr") -->
+    <PackageVersion Include="Microsoft.AspNetCore.SignalR.Client" Version="10.0.7" />
+    <!--#endif -->
+  </ItemGroup>
+</Project>

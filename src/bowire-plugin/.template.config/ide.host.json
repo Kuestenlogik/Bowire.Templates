@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json.schemastore.org/vs-2017.3.host",
+  "order": 0,
+  "symbolInfo": [
+    { "id": "DisplayName",         "isVisible": true, "name": { "text": "Protocol display name" } },
+    { "id": "ProtocolId",          "isVisible": true, "name": { "text": "Protocol ID (short)" } },
+    { "id": "PluginClassName",     "isVisible": true, "name": { "text": "Plugin class name" } },
+    { "id": "IconSvg",             "isVisible": false, "name": { "text": "SVG icon markup (advanced)" } },
+    { "id": "Author",              "isVisible": true, "name": { "text": "Author" } },
+    { "id": "Company",             "isVisible": true, "name": { "text": "Company" } },
+    { "id": "BowireSdkVersion",   "isVisible": true, "name": { "text": "Kuestenlogik.Bowire SDK package version" } },
+    { "id": "Preset",              "isVisible": true, "name": { "text": "Protocol preset (none / rest / mqtt / websocket)" } },
+    { "id": "IncludeCI",           "isVisible": true, "name": { "text": "Include GitHub Actions workflow" } },
+    { "id": "IncludeDuplexChannel","isVisible": true, "name": { "text": "Include IBowireChannel duplex demo" } },
+    { "id": "IncludeIntegrationTests","isVisible": true, "name": { "text": "Include ASP.NET Core TestServer integration test" } },
+    { "id": "ProjectOnly",         "isVisible": true, "name": { "text": "Emit projects only (no solution/build props)" } },
+    { "id": "Minimal",             "isVisible": true, "name": { "text": "Minimal: imply ProjectOnly + no CI + no integration tests" } }
+  ]
+}

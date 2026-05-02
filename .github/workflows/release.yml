@@ -1,0 +1,74 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+env:
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+  DOTNET_NOLOGO: true
+
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '10.0.x'
+          dotnet-quality: preview
+
+      - name: Inject release notes + version
+        shell: pwsh
+        run: ./build.ps1
+
+      - name: dotnet pack
+        run: dotnet pack -c Release -o output
+
+      # Gated on non-RC tags so `v*-rc*` exercises the full pipeline as
+      # a dry run without permanently publishing a package version.
+      # GA tags (no `-rc` suffix) push for real.
+      - name: Publish to GitHub Packages
+        if: ${{ !contains(github.ref, '-rc') }}
+        run: dotnet nuget push "output/*.nupkg" --source "https://nuget.pkg.github.com/Kuestenlogik/index.json" --api-key ${{ secrets.GITHUB_TOKEN }} --skip-duplicate
+
+      # nuget.org: only on real GA tags (no -rc), and only when the
+      # secret is configured. NUGET_API_KEY needs the
+      # 'Push new packages and package versions' scope with glob 'KL.*'.
+      # Required for `dotnet new install Kuestenlogik.Bowire.Templates` to work
+      # without --add-source.
+      - name: Publish to nuget.org
+        if: ${{ !contains(github.ref, '-rc') && env.NUGET_API_KEY != '' }}
+        env:
+          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+        run: |
+          dotnet nuget push "output/*.nupkg" --source https://api.nuget.org/v3/index.json --api-key "$NUGET_API_KEY" --skip-duplicate
+
+      - name: Extract latest release notes
+        shell: pwsh
+        run: |
+          $content = Get-Content RELEASE_NOTES.md -Raw
+          if ($content -match '(?s)(####.+?)(?=\n####|\z)') {
+            $Matches[1].Trim() | Set-Content RELEASE_NOTES_LATEST.md
+          } else {
+            $content | Set-Content RELEASE_NOTES_LATEST.md
+          }
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: 'Kuestenlogik.Bowire.Templates ${{ github.ref_name }}'
+          body_path: RELEASE_NOTES_LATEST.md
+          files: output/*.nupkg
+          draft: false
+          prerelease: ${{ contains(github.ref, '-rc') }}
