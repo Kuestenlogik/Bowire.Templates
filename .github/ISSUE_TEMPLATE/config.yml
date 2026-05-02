@@ -1,0 +1,7 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Bowire (the SDK) bugs & questions
+    url: https://github.com/Kuestenlogik/Bowire/issues
+    about: If the bug is in Kuestenlogik.Bowire itself — the plugin runtime, the workbench
+      UI, discovery, invoke — file it on the Bowire repo. Open issues here only
+      for problems with the scaffolding / dotnet-new template.

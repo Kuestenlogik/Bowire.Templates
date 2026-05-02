@@ -1,0 +1,31 @@
+# Normalize line endings on commit; check out with the working copy's native
+# ending. Stops the "LF will be replaced by CRLF" warning storm on Windows.
+* text=auto eol=lf
+
+# PowerShell scripts must stay CRLF so the Windows PS host does not choke on
+# BOM-less LF files in some configurations.
+*.ps1   text eol=crlf
+*.psm1  text eol=crlf
+*.psd1  text eol=crlf
+
+# Windows-native files.
+*.bat   text eol=crlf
+*.cmd   text eol=crlf
+
+# MSBuild / project files: LF is fine.
+*.csproj    text eol=lf
+*.slnx      text eol=lf
+*.props     text eol=lf
+*.targets   text eol=lf
+*.json      text eol=lf
+*.yml       text eol=lf
+*.yaml      text eol=lf
+*.md        text eol=lf
+
+# Binaries never get text munging.
+*.png binary
+*.jpg binary
+*.ico binary
+*.svg binary
+*.nupkg binary
+*.snupkg binary

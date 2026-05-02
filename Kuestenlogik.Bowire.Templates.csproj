@@ -1,0 +1,45 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <PackageType>Template</PackageType>
+    <PackageId>Kuestenlogik.Bowire.Templates</PackageId>
+    <Title>Bowire Plugin Templates</Title>
+    <VersionPrefix>1.0.1</VersionPrefix>
+    <PackageReleaseNotes>* Initial release.
+* Scaffolds a Bowire protocol plugin with `IBowireProtocol` stub, `.slnx` solution, xunit tests, and optional GitHub Actions CI.
+* `--IncludeDuplexChannel` flag scaffolds a full `IBowireChannel` echo demo for bidirectional/duplex protocols.
+* `--Preset none|rest|mqtt|websocket|grpc|signalr` pre-fills `DiscoverAsync`/`InvokeAsync` with transport-specific starter code (HTTP+OpenAPI probe; MQTTnet connect+publish; ClientWebSocket roundtrip; GrpcChannel connect; SignalR HubConnection invoke).
+* `--IncludeIntegrationTests` scaffolds a second test project that hosts the plugin inside an ASP.NET Core `TestServer` and exercises the real Bowire HTTP API.
+* `--ProtocolId` is lowercased and stripped to `[a-z0-9_-]` automatically.
+* `--IconSvg` parameter embeds custom SVG markup in the generated `IconSvg` property (default keeps the current circle demo).
+* `--Minimal` shortcut combines `ProjectOnly=true + IncludeCI=false + IncludeIntegrationTests=false` for the smallest possible output.</PackageReleaseNotes>
+    <Authors>Kuestenlogik</Authors>
+    <Company>Kuestenlogik</Company>
+    <Copyright>Copyright (c) 2026 Kuestenlogik</Copyright>
+    <Description>dotnet new / Visual Studio templates for scaffolding Bowire protocol plugins.</Description>
+    <PackageTags>bowire bowire-plugin template dotnet-new plugin</PackageTags>
+
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/Kuestenlogik/Bowire.Templates</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/Kuestenlogik/Bowire.Templates</PackageProjectUrl>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageIcon>icon.png</PackageIcon>
+
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <IncludeContentInPack>true</IncludeContentInPack>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <ContentTargetFolders>content</ContentTargetFolders>
+    <EnableDefaultItems>false</EnableDefaultItems>
+    <NoDefaultExcludes>true</NoDefaultExcludes>
+    <NoWarn>$(NoWarn);NU5128</NoWarn>
+    <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="src\**\*" Exclude="src\**\bin\**;src\**\obj\**;src\**\artifacts\**" />
+    <None Include="README.md" Pack="true" PackagePath="\" />
+    <None Include="images\bowire_logo_small.png" Pack="true" PackagePath="icon.png" Visible="false" />
+  </ItemGroup>
+
+</Project>

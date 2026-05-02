@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Bowire.Plugin1/Bowire.Plugin1.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Bowire.Plugin1.Tests/Bowire.Plugin1.Tests.csproj" />
+    <!--#if (IncludeIntegrationTests) -->
+    <Project Path="tests/Bowire.Plugin1.IntegrationTests/Bowire.Plugin1.IntegrationTests.csproj" />
+    <!--#endif -->
+  </Folder>
+</Solution>

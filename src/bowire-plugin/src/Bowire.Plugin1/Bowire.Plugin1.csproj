@@ -1,0 +1,43 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <PackageId>Bowire.Plugin1</PackageId>
+    <Description>Bowire protocol plugin for MY_PROTOCOL_DISPLAY_NAME.</Description>
+    <PackageTags>bowire bowire-plugin MY_PROTOCOL_ID</PackageTags>
+    <PackageType>BowirePlugin</PackageType>
+    <IsPackable>true</IsPackable>
+    <!--#if (ProjectOnly || Minimal) -->
+    <TargetFramework>net10.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <!--#endif -->
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!--#if (ProjectOnly || Minimal) -->
+    <PackageReference Include="Kuestenlogik.Bowire" Version="MY_BOWIRE_VERSION" />
+    <!--#if (Preset == "mqtt") -->
+    <PackageReference Include="MQTTnet" Version="5.1.0.1559" />
+    <!--#endif -->
+    <!--#if (Preset == "grpc") -->
+    <PackageReference Include="Grpc.Net.Client" Version="2.80.0" />
+    <!--#endif -->
+    <!--#if (Preset == "signalr") -->
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="10.0.7" />
+    <!--#endif -->
+    <!--#else -->
+    <PackageReference Include="Kuestenlogik.Bowire" />
+    <!--#if (Preset == "mqtt") -->
+    <PackageReference Include="MQTTnet" />
+    <!--#endif -->
+    <!--#if (Preset == "grpc") -->
+    <PackageReference Include="Grpc.Net.Client" />
+    <!--#endif -->
+    <!--#if (Preset == "signalr") -->
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" />
+    <!--#endif -->
+    <!--#endif -->
+  </ItemGroup>
+
+</Project>
