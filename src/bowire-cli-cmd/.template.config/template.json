@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Kuestenlogik",
+  "classifications": [ "Bowire", "Plugin", "CLI" ],
+  "identity": "Kuestenlogik.Bowire.Templates.CliCommand",
+  "name": "Bowire CLI command",
+  "description": "A scaffold for an IBowireCliCommand implementation that contributes a new 'bowire <verb>' subcommand. Drop into a Bowire-plugin project that references Kuestenlogik.Bowire.Cli.",
+  "shortName": "bowire-cli-cmd",
+  "tags": {
+    "language": "C#",
+    "type": "item"
+  },
+  "sourceName": "MyCommand",
+  "preferNameDirectory": false,
+  "defaultName": "MyCommand",
+  "symbols": {
+    "Verb": {
+      "type": "parameter",
+      "datatype": "string",
+      "defaultValue": "mycmd",
+      "replaces": "MY_VERB",
+      "description": "The verb that appears in the CLI ('bowire mycmd ...'). Lowercase, single word."
+    }
+  },
+  "primaryOutputs": [
+    { "path": "MyCommand.cs" }
+  ]
+}

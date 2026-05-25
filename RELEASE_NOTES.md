@@ -1,3 +1,9 @@
+#### 1.1.0 May 25th 2026 ####
+
+* New item template `bowire-cli-cmd` — scaffolds an `IBowireCliCommand` implementation that contributes a `bowire <verb>` subcommand. Drop into any plugin project that references `Kuestenlogik.Bowire.Cli`.
+* New item template `bowire-mock-emit` — scaffolds an `IBowireMockEmitter` implementation that replays `BowireRecording` steps over a wire protocol. Matches the in-tree Kafka / AMQP / TacticalAPI emitter shape (binary-first payload precedence, `ReplaySpeed` + `Loop` honoured).
+* `bowire-plugin` template's generated `Directory.Packages.props` floor bumped to Bowire 1.6.0 (was 1.5.0). Matches the current compatibility-matrix baseline.
+
 #### 1.0.1 May 3rd 2026 ####
 
 * Initial release.

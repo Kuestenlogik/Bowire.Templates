@@ -4,8 +4,11 @@
     <PackageType>Template</PackageType>
     <PackageId>Kuestenlogik.Bowire.Templates</PackageId>
     <Title>Bowire Plugin Templates</Title>
-    <VersionPrefix>1.0.1</VersionPrefix>
-    <PackageReleaseNotes>* Initial release.
+    <VersionPrefix>1.1.0</VersionPrefix>
+    <PackageReleaseNotes>* New item template `bowire-cli-cmd` — scaffolds an `IBowireCliCommand` implementation that contributes a `bowire &lt;verb&gt;` subcommand.
+* New item template `bowire-mock-emit` — scaffolds an `IBowireMockEmitter` implementation that replays `BowireRecording` steps over a wire protocol.
+* `bowire-plugin` template's generated `Directory.Packages.props` floor bumped to Bowire 1.6.0.
+* Initial release.
 * Scaffolds a Bowire protocol plugin with `IBowireProtocol` stub, `.slnx` solution, xunit tests, and optional GitHub Actions CI.
 * `--IncludeDuplexChannel` flag scaffolds a full `IBowireChannel` echo demo for bidirectional/duplex protocols.
 * `--Preset none|rest|mqtt|websocket|grpc|signalr` pre-fills `DiscoverAsync`/`InvokeAsync` with transport-specific starter code (HTTP+OpenAPI probe; MQTTnet connect+publish; ClientWebSocket roundtrip; GrpcChannel connect; SignalR HubConnection invoke).

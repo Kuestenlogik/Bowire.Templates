@@ -54,6 +54,19 @@ The template ships a single `dotnet new bowire-plugin` scaffolder that produces 
 - [x] **`docs/BowirePluginTemplate.md`** — per-template reference with parameter table, preset table, scaffold layout, and "Adding to an existing monorepo" recipe.
 - [x] **Bowire main-repo `docs/protocols/custom.md`** — now leads with `dotnet new bowire-plugin` (template-first) and keeps the manual-setup path as an alternative. Sample code was also corrected to match the real `BowireServiceInfo` / `BowireMethodInfo` / `InvokeResult` signatures.
 
+## v1.1.0 — Extension-point templates (2026-05-25)
+
+Bowire 1.6.0 documents four extension contracts (`IBowireProtocol`, `IBowireCliCommand`, `IBowireMockEmitter`, `IBowireUiExtension`). The original template covered only the first; this release adds scaffolders for two more so plugin authors can wire in CLI verbs and recording-replay emitters without copy-pasting from the first-party plugins.
+
+- [x] **`bowire-cli-cmd` item template** — single-file `IBowireCliCommand` scaffold (`MyCommand.cs`) with `--Verb` parameter that replaces the `MY_VERB` token throughout. Pattern matches the first-party `ScanCliCommand`.
+- [x] **`bowire-mock-emit` item template** — single-file `IBowireMockEmitter` scaffold (`MyMockEmitter.cs`) with `--EmitterId` parameter. Includes the shared payload-decoding convention (`ResponseBinary` first, `Body` fallback), `ReplaySpeed` timing-multiplier handling, and `Loop` outer loop. Matches the in-tree Kafka / AMQP / TacticalAPI emitter shape.
+- [x] **README + ROADMAP** updated for the two new templates; quickstart shows all three.
+
+## Maintenance
+
+- [x] **2026-05-25** — bumped `--BowireSdkVersion` default in `template.json` from `1.3.*` to `1.6.0` (tracking the current `Kuestenlogik.Bowire` release line + compatibility-matrix floor).
+- [x] **2026-05-13** — bumped `--BowireSdkVersion` default in `template.json` from `0.9.*` to `1.3.*` (tracking current Bowire 1.3.x release line); updated the matching comment in `Directory.Packages.props` and the parameter table in `docs/BowirePluginTemplate.md`.
+
 ## Blocked on external
 
 - [ ] **Publish `v0.1.0` to nuget.org** — waiting on `Kuestenlogik.Bowire` being published so `dotnet restore` in the generated plugin actually resolves the SDK reference.

@@ -15,16 +15,27 @@ dotnet new install Kuestenlogik.Bowire.Templates
 
 ## Available templates
 
-| Template                 | Short name         | Docs                                                        |
-|--------------------------|--------------------|-------------------------------------------------------------|
-| Bowire Protocol Plugin  | `bowire-plugin`   | [docs/BowirePluginTemplate.md](docs/BowirePluginTemplate.md) |
+| Template                 | Short name         | Kind    | Docs                                                        |
+|--------------------------|--------------------|---------|-------------------------------------------------------------|
+| Bowire Protocol Plugin   | `bowire-plugin`    | project | [docs/BowirePluginTemplate.md](docs/BowirePluginTemplate.md) |
+| Bowire CLI command       | `bowire-cli-cmd`   | item    | adds an `IBowireCliCommand` scaffold (`bowire <verb>`)      |
+| Bowire mock emitter      | `bowire-mock-emit` | item    | adds an `IBowireMockEmitter` scaffold (recording replay)    |
+
+`bowire-plugin` is a **project** template — scaffolds a full plugin repo. The two **item** templates drop a single C# file into an existing Bowire-plugin project so you can wire in additional extension points without re-scaffolding.
 
 ## Quickstart
 
 ```bash
+# Full project scaffold
 dotnet new bowire-plugin -n Contoso.Bowire.Protocol.Foo
 cd Contoso.Bowire.Protocol.Foo
 dotnet test
+
+# Add a `bowire foo` CLI subcommand to that plugin
+dotnet new bowire-cli-cmd -n FooCommand --Verb foo
+
+# Add a recording-replay emitter to that plugin
+dotnet new bowire-mock-emit -n FooMockEmitter --EmitterId foo
 ```
 
 See [docs/BowirePluginTemplate.md](docs/BowirePluginTemplate.md) for the full parameter list and what the generated scaffold does. `--ProjectOnly true` emits just the two csprojs (no solution, no build props) for dropping into an existing monorepo.
@@ -50,10 +61,16 @@ Bowire.Templates/
 │   ├── getReleaseNotes.ps1
 │   └── bumpVersion.ps1
 └── src/
-    └── bowire-plugin/              # template source
+    ├── bowire-plugin/              # project template (full plugin repo)
+    │   ├── .template.config/
+    │   ├── src/Bowire.Plugin1/
+    │   └── tests/Bowire.Plugin1.Tests/
+    ├── bowire-cli-cmd/             # item template — IBowireCliCommand scaffold
+    │   ├── .template.config/
+    │   └── MyCommand.cs
+    └── bowire-mock-emit/           # item template — IBowireMockEmitter scaffold
         ├── .template.config/
-        ├── src/Bowire.Plugin1/
-        └── tests/Bowire.Plugin1.Tests/
+        └── MyMockEmitter.cs
 ```
 
 Local dev loop:

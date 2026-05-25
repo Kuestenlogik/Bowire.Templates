@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Kuestenlogik",
+  "classifications": [ "Bowire", "Plugin", "Mock" ],
+  "identity": "Kuestenlogik.Bowire.Templates.MockEmitter",
+  "name": "Bowire mock emitter",
+  "description": "A scaffold for an IBowireMockEmitter implementation that replays BowireRecording steps over a wire protocol. Drop into a Bowire-plugin project that already references Kuestenlogik.Bowire.",
+  "shortName": "bowire-mock-emit",
+  "tags": {
+    "language": "C#",
+    "type": "item"
+  },
+  "sourceName": "MyMockEmitter",
+  "preferNameDirectory": false,
+  "defaultName": "MyMockEmitter",
+  "symbols": {
+    "EmitterId": {
+      "type": "parameter",
+      "datatype": "string",
+      "defaultValue": "myproto",
+      "replaces": "MY_EMITTER_ID",
+      "description": "Stable id returned from IBowireMockEmitter.Id — usually the protocol id ('amqp', 'kafka', …)."
+    }
+  },
+  "primaryOutputs": [
+    { "path": "MyMockEmitter.cs" }
+  ]
+}

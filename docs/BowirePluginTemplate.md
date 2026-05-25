@@ -43,7 +43,7 @@ Contoso.Bowire.Protocol.Foo/
 | `--Preset`               | `none`             | Seed `DiscoverAsync`/`InvokeAsync` with a realistic starting point for a specific transport. One of `none` / `rest` / `mqtt` / `websocket` / `grpc` / `signalr`. See [Presets](#presets). |
 | `--IconSvg`              | demo circle        | Raw SVG markup embedded in the generated `IconSvg` property (what Bowire shows on the protocol tab). Pass your own `<svg>...</svg>` string. |
 | `--Minimal`              | `false`            | Shortcut: implies `--ProjectOnly true --IncludeCI false --IncludeIntegrationTests false`. Produces the smallest possible plugin output (plugin csproj + unit-test csproj, no solution, no build-props, no CI). |
-| `--BowireSdkVersion`    | `0.1.*`            | Version range of the `Kuestenlogik.Bowire` NuGet package (the Bowire SDK) this plugin references. |
+| `--BowireSdkVersion`    | `1.6.0`            | Version range of the `Kuestenlogik.Bowire` NuGet package (the Bowire SDK) this plugin references — also the host-Bowire floor your plugin will demand. |
 | `--IncludeCI`            | `true`             | Include a GitHub Actions workflow that builds, tests, and packs the plugin. |
 | `--IncludeDuplexChannel` | `false`            | Scaffold a full `IBowireChannel` echo demo for bidirectional / duplex protocols. |
 | `--IncludeIntegrationTests` | `false`         | Scaffold a second test project (`<Name>.IntegrationTests`) that hosts the plugin in an ASP.NET Core `TestServer` with `AddBowire()` / `MapBowire()` and hits `/bowire/api/protocols` + `/bowire/api/services` over HTTP. Requires the plugin project name to contain `Bowire` (e.g. `Contoso.Bowire.Protocol.Foo`) — Bowire's auto-discovery only scans assemblies whose name contains that substring. |
