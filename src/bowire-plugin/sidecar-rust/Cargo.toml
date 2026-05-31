@@ -1,0 +1,22 @@
+[package]
+name = "MY_RUST_CRATE_NAME"
+version = "0.1.0"
+edition = "2021"
+description = "MY_PROTOCOL_DISPLAY_NAME — Bowire sidecar plugin (Rust)."
+authors = ["MY_AUTHOR"]
+license = "Apache-2.0"
+
+[[bin]]
+name = "MY_RUST_CRATE_NAME"
+path = "src/main.rs"
+
+[dependencies]
+# bowire-plugin is the official Rust SDK that speaks the JSON-RPC
+# NDJSON / HTTP+SSE contract the Bowire host talks to sidecars over.
+# Add `features = ["http"]` to opt into the streamable-HTTP runtime.
+bowire-plugin = "MY_BOWIRE_RUST_SDK_VERSION"
+async-trait = "0.1"
+tokio = { version = "1", features = ["rt-multi-thread", "macros", "signal", "io-std", "io-util"] }
+
+[dev-dependencies]
+tokio = { version = "1", features = ["macros", "rt"] }

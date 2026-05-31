@@ -133,6 +133,34 @@ try {
     New-Item -ItemType Directory -Path $OutputRoot -Force | Out-Null
     Write-Output "=== Run artifacts: $OutputRoot ==="
 
+    function Test-SidecarVariant {
+        # Polyglot sidecar variants can't be built/tested by `dotnet test`
+        # (they're Python / Node / Rust / Go projects). Smoke = instantiate
+        # via `dotnet new` and verify the expected entry-point files land
+        # — proves template.json + sources blocks are wired correctly.
+        param(
+            [Parameter(Mandatory=$true)][string]$Name,
+            [Parameter(Mandatory=$true)][string]$Sidecar,
+            [Parameter(Mandatory=$true)][string[]]$ExpectedFiles,
+            [string]$ProtocolId = ""
+        )
+        $folder = "$OutputRoot/$Name"
+        Write-Output "=== $Name (Sidecar=$Sidecar) ==="
+        $newArgs = @("new", "bowire-plugin", "-n", $Name, "-o", $folder, "--Sidecar", $Sidecar, "--skipRestore")
+        if (-not [string]::IsNullOrEmpty($ProtocolId)) {
+            $newArgs += @("--ProtocolId", $ProtocolId)
+        }
+        Exec { dotnet @newArgs } "dotnet new bowire-plugin --Sidecar $Sidecar failed for $Name"
+
+        foreach ($expected in $ExpectedFiles) {
+            $path = Join-Path $folder $expected
+            if (-not (Test-Path $path)) {
+                throw "Expected file missing in $Name scaffold: $expected"
+            }
+        }
+        Write-Output "  -> all $($ExpectedFiles.Count) expected files present"
+    }
+
     Test-BowirePluginVariant -Name "Smoke.NoChannel"       -IncludeDuplexChannel "false"
     Test-BowirePluginVariant -Name "Smoke.WithChannel"     -IncludeDuplexChannel "true"
     Test-BowirePluginVariant -Name "Smoke.ProjectOnly"     -IncludeDuplexChannel "false" -ProjectOnly "true"
@@ -148,6 +176,22 @@ try {
     Test-BowirePluginVariant -Name "Smoke.Bowire.IntegrationTests" -IncludeDuplexChannel "false" -IncludeIntegrationTests "true"
     Test-BowirePluginVariant -Name "Smoke.DirtyProtocolId" -IncludeDuplexChannel "false" -ProtocolId "My Proto!!"
     Test-BowirePluginVariant -Name "Smoke.Minimal"         -IncludeDuplexChannel "false" -Minimal "true"
+
+    Test-SidecarVariant -Name "Smoke.Sidecar.Python" -Sidecar "python" `
+        -ProtocolId "py-side" `
+        -ExpectedFiles @("sidecar.json", "pyproject.toml", "src/py_side/__main__.py", "src/py_side/plugin.py", "tests/test_plugin.py")
+
+    Test-SidecarVariant -Name "Smoke.Sidecar.Node" -Sidecar "node" `
+        -ProtocolId "node-side" `
+        -ExpectedFiles @("sidecar.json", "package.json", "tsconfig.json", "src/index.ts", "src/plugin.ts", "tests/plugin.test.ts")
+
+    Test-SidecarVariant -Name "Smoke.Sidecar.Rust" -Sidecar "rust" `
+        -ProtocolId "rust-side" `
+        -ExpectedFiles @("sidecar.json", "Cargo.toml", "src/main.rs", "README.md")
+
+    Test-SidecarVariant -Name "Smoke.Sidecar.Go" -Sidecar "go" `
+        -ProtocolId "go-side" `
+        -ExpectedFiles @("sidecar.json", "go.mod", "main.go", "main_test.go", "README.md")
 
     # Verify ProtocolId got lowercased + stripped to [a-z0-9_-].
     $dirtyProtocol = Get-Content "$OutputRoot/Smoke.DirtyProtocolId/src/Smoke.DirtyProtocolId/MyProtocol.cs" -Raw

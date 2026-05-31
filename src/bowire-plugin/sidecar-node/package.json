@@ -1,0 +1,26 @@
+{
+  "name": "MY_NODE_PACKAGE_NAME",
+  "version": "0.1.0",
+  "description": "MY_PROTOCOL_DISPLAY_NAME — Bowire sidecar plugin (Node.js).",
+  "type": "module",
+  "main": "./dist/index.js",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/index.js",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@bowire/plugin": "MY_BOWIRE_NODE_SDK_VERSION"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "typescript": "^5.5.0",
+    "vitest": "^2.0.0"
+  },
+  "author": "MY_AUTHOR",
+  "license": "Apache-2.0"
+}

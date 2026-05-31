@@ -1,0 +1,11 @@
+*.exe
+*.test
+*.out
+/MY_PROTOCOL_ID
+/dist/
+go.sum
+.env
+.env.local
+.DS_Store
+.vscode/
+.idea/

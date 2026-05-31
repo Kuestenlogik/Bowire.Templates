@@ -82,7 +82,10 @@
       "defaultValue": "none",
       "choices": [
         { "choice": "none",   "description": "Default — .NET plugin scaffold (csproj, IBowireProtocol implementation, NuGet package)." },
-        { "choice": "python", "description": "Polyglot sidecar — Python plugin scaffold (sidecar.json + pyproject.toml + BowirePlugin subclass). No .NET project; ships as a zip the Bowire host spawns over JSON-RPC." }
+        { "choice": "python", "description": "Polyglot sidecar — Python plugin (sidecar.json + pyproject.toml + BowirePlugin subclass). No .NET project; ships as a zip the Bowire host spawns over JSON-RPC." },
+        { "choice": "node",   "description": "Polyglot sidecar — Node.js / TypeScript plugin (sidecar.json + package.json + BowirePluginBase subclass on @bowire/plugin). Ships as a zip with built dist/." },
+        { "choice": "rust",   "description": "Polyglot sidecar — Rust plugin (sidecar.json + Cargo.toml + bowire-plugin trait impl). Ships as a zip with a compiled binary." },
+        { "choice": "go",     "description": "Polyglot sidecar — Go plugin (sidecar.json + go.mod + Bowire.Sdk.Go interface impl). Ships as a zip with a compiled binary." }
       ],
       "description": "Pick the plugin shape. Sidecar variants ship a non-.NET runtime that Bowire bridges via JSON-RPC over stdio or HTTP/SSE."
     },
@@ -98,6 +101,58 @@
       },
       "replaces": "MY_PYTHON_PACKAGE_NAME",
       "fileRename": "MY_PYTHON_PACKAGE_NAME"
+    },
+    "NodePackageName": {
+      "type": "generated",
+      "generator": "regex",
+      "dataType": "string",
+      "parameters": {
+        "source": "ProtocolIdLower",
+        "steps": [
+          { "regex": "[^a-z0-9-]", "replacement": "-" }
+        ]
+      },
+      "replaces": "MY_NODE_PACKAGE_NAME"
+    },
+    "RustCrateName": {
+      "type": "generated",
+      "generator": "regex",
+      "dataType": "string",
+      "parameters": {
+        "source": "ProtocolIdLower",
+        "steps": [
+          { "regex": "[^a-z0-9_]", "replacement": "_" }
+        ]
+      },
+      "replaces": "MY_RUST_CRATE_NAME"
+    },
+    "GoModulePath": {
+      "type": "parameter",
+      "datatype": "string",
+      "defaultValue": "example.com/your-org/MY_PROTOCOL_ID",
+      "replaces": "MY_GO_MODULE_PATH",
+      "description": "Go module path the generated go.mod declares. Defaults to a placeholder you should overwrite with your real repo path (e.g. github.com/acme/my-sidecar)."
+    },
+    "BowireRustSdkVersion": {
+      "type": "parameter",
+      "datatype": "string",
+      "defaultValue": "0.1",
+      "replaces": "MY_BOWIRE_RUST_SDK_VERSION",
+      "description": "Version range of the bowire-plugin crate this sidecar references. Only relevant for --Sidecar rust."
+    },
+    "BowireNodeSdkVersion": {
+      "type": "parameter",
+      "datatype": "string",
+      "defaultValue": "^0.1.0",
+      "replaces": "MY_BOWIRE_NODE_SDK_VERSION",
+      "description": "Version range of the @bowire/plugin npm package this sidecar references. Only relevant for --Sidecar node."
+    },
+    "BowireGoSdkVersion": {
+      "type": "parameter",
+      "datatype": "string",
+      "defaultValue": "v0.1.0",
+      "replaces": "MY_BOWIRE_GO_SDK_VERSION",
+      "description": "Version of the Bowire.Sdk.Go module this sidecar requires in go.mod. Only relevant for --Sidecar go."
     },
     "Preset": {
       "type": "parameter",
@@ -187,7 +242,7 @@
           "exclude": [ "tests/Bowire.Plugin1.IntegrationTests/**" ]
         },
         {
-          "exclude": [ "sidecar-python/**" ]
+          "exclude": [ "sidecar-python/**", "sidecar-node/**", "sidecar-rust/**", "sidecar-go/**" ]
         }
       ]
     },
@@ -195,12 +250,30 @@
       "source": "./sidecar-python/",
       "target": "./",
       "condition": "(Sidecar == \"python\")"
+    },
+    {
+      "source": "./sidecar-node/",
+      "target": "./",
+      "condition": "(Sidecar == \"node\")"
+    },
+    {
+      "source": "./sidecar-rust/",
+      "target": "./",
+      "condition": "(Sidecar == \"rust\")"
+    },
+    {
+      "source": "./sidecar-go/",
+      "target": "./",
+      "condition": "(Sidecar == \"go\")"
     }
   ],
   "primaryOutputs": [
     { "path": "src/Bowire.Plugin1/Bowire.Plugin1.csproj", "condition": "(Sidecar == \"none\")" },
     { "path": "tests/Bowire.Plugin1.Tests/Bowire.Plugin1.Tests.csproj", "condition": "(Sidecar == \"none\")" },
-    { "path": "pyproject.toml", "condition": "(Sidecar == \"python\")" }
+    { "path": "pyproject.toml", "condition": "(Sidecar == \"python\")" },
+    { "path": "package.json", "condition": "(Sidecar == \"node\")" },
+    { "path": "Cargo.toml", "condition": "(Sidecar == \"rust\")" },
+    { "path": "go.mod", "condition": "(Sidecar == \"go\")" }
   ],
   "postActions": [
     {
