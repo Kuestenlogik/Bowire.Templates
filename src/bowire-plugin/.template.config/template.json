@@ -76,6 +76,29 @@
       "replaces": "MY_COMPANY",
       "description": "NuGet package Company field."
     },
+    "Sidecar": {
+      "type": "parameter",
+      "datatype": "choice",
+      "defaultValue": "none",
+      "choices": [
+        { "choice": "none",   "description": "Default — .NET plugin scaffold (csproj, IBowireProtocol implementation, NuGet package)." },
+        { "choice": "python", "description": "Polyglot sidecar — Python plugin scaffold (sidecar.json + pyproject.toml + BowirePlugin subclass). No .NET project; ships as a zip the Bowire host spawns over JSON-RPC." }
+      ],
+      "description": "Pick the plugin shape. Sidecar variants ship a non-.NET runtime that Bowire bridges via JSON-RPC over stdio or HTTP/SSE."
+    },
+    "PythonPackageName": {
+      "type": "generated",
+      "generator": "regex",
+      "dataType": "string",
+      "parameters": {
+        "source": "ProtocolIdLower",
+        "steps": [
+          { "regex": "[^a-z0-9_]", "replacement": "_" }
+        ]
+      },
+      "replaces": "MY_PYTHON_PACKAGE_NAME",
+      "fileRename": "MY_PYTHON_PACKAGE_NAME"
+    },
     "Preset": {
       "type": "parameter",
       "datatype": "choice",
@@ -138,6 +161,7 @@
     {
       "source": "./",
       "target": "./",
+      "condition": "(Sidecar == \"none\")",
       "modifiers": [
         {
           "condition": "(!IncludeCI || Minimal)",
@@ -161,17 +185,26 @@
         {
           "condition": "(!IncludeIntegrationTests || Minimal)",
           "exclude": [ "tests/Bowire.Plugin1.IntegrationTests/**" ]
+        },
+        {
+          "exclude": [ "sidecar-python/**" ]
         }
       ]
+    },
+    {
+      "source": "./sidecar-python/",
+      "target": "./",
+      "condition": "(Sidecar == \"python\")"
     }
   ],
   "primaryOutputs": [
-    { "path": "src/Bowire.Plugin1/Bowire.Plugin1.csproj" },
-    { "path": "tests/Bowire.Plugin1.Tests/Bowire.Plugin1.Tests.csproj" }
+    { "path": "src/Bowire.Plugin1/Bowire.Plugin1.csproj", "condition": "(Sidecar == \"none\")" },
+    { "path": "tests/Bowire.Plugin1.Tests/Bowire.Plugin1.Tests.csproj", "condition": "(Sidecar == \"none\")" },
+    { "path": "pyproject.toml", "condition": "(Sidecar == \"python\")" }
   ],
   "postActions": [
     {
-      "condition": "(!skipRestore)",
+      "condition": "(!skipRestore && Sidecar == \"none\")",
       "description": "Restore NuGet packages required by this project.",
       "manualInstructions": [ { "text": "Run `dotnet restore`" } ],
       "actionId": "210D431B-A78B-4D2F-B762-4ED3E3EA9025",

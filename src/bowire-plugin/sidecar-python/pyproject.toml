@@ -1,0 +1,38 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "Bowire.Plugin1"
+version = "0.1.0"
+description = "MY_PROTOCOL_DISPLAY_NAME — Bowire sidecar plugin (polyglot, ships as a zip the Bowire host spawns over JSON-RPC)."
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [{ name = "MY_AUTHOR" }]
+license = { text = "Apache-2.0" }
+keywords = ["bowire", "bowire-plugin", "sidecar"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "License :: OSI Approved :: Apache Software License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+]
+dependencies = [
+  # bowire-plugin is the official Python SDK that speaks the JSON-RPC
+  # NDJSON / HTTP+SSE contract the Bowire host talks to sidecars over.
+  # Pin to a minor floor so SDK additions land automatically.
+  "bowire-plugin>=0.2.0,<1.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "ruff>=0.6"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/MY_PYTHON_PACKAGE_NAME"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"

@@ -1,0 +1,15 @@
+{
+  "$schema": "https://bowire.io/schemas/sidecar.schema.json",
+  "packageId": "Bowire.Plugin1",
+  "version": "0.1.0",
+  "protocol": {
+    "id": "MY_PROTOCOL_ID",
+    "name": "MY_PROTOCOL_DISPLAY_NAME",
+    "iconSvg": "ICON_SVG_PLACEHOLDER"
+  },
+  "transport": "stdio",
+  "executable": "python",
+  "args": ["-m", "MY_PYTHON_PACKAGE_NAME"],
+  "envPrefix": "BOWIRE_",
+  "shutdownTimeoutMs": 3000
+}
