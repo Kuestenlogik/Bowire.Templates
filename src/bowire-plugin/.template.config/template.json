@@ -264,7 +264,12 @@
     {
       "source": "./sidecar-go/",
       "target": "./",
-      "condition": "(Sidecar == \"go\")"
+      "condition": "(Sidecar == \"go\")",
+      "rename": {
+        "go.mod.tpl": "go.mod",
+        "main.go.tpl": "main.go",
+        "main_test.go.tpl": "main_test.go"
+      }
     }
   ],
   "primaryOutputs": [
