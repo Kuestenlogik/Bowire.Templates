@@ -16,7 +16,7 @@
 
   <ItemGroup>
     <!--#if (ProjectOnly || Minimal) -->
-    <PackageReference Include="Kuestenlogik.Bowire" Version="2.0.0" />
+    <PackageReference Include="Kuestenlogik.Bowire" Version="2.0.1" />
     <!--#if (Preset == "mqtt") -->
     <PackageReference Include="MQTTnet" Version="5.1.0.1559" />
     <!--#endif -->
