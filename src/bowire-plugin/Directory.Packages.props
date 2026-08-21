@@ -8,9 +8,8 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageVersion Include="Kuestenlogik.Bowire" Version="MY_BOWIRE_VERSION" />
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.5.1" />
-    <PackageVersion Include="xunit.v3" Version="3.2.2" />
-    <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.5" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.9.0" />
+    <PackageVersion Include="xunit.v3" Version="4.0.0" />
     <!--#if (IncludeIntegrationTests) -->
     <PackageVersion Include="Microsoft.AspNetCore.TestHost" Version="10.0.7" />
     <!--#endif -->
