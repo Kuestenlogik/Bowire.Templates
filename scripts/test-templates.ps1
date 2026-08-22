@@ -82,15 +82,29 @@ function Test-BowirePluginVariant {
     $pluginCsproj = "$folder/src/$Name/$Name.csproj"
     $testsCsproj  = "$folder/tests/$Name.Tests/$Name.Tests.csproj"
 
-    if ($selfContained) {
-        # No .slnx in ProjectOnly / Minimal mode — point dotnet at the
-        # csprojs directly.
-        Exec { dotnet build $pluginCsproj -c Release } "dotnet build failed for $Name (plugin)"
-        Exec { dotnet test  $testsCsproj  -c Release } "dotnet test failed for $Name (tests)"
+    # Run from inside the generated folder, which is what someone actually
+    # does after `dotnet new` — and the only way its global.json is read at
+    # all. The SDK resolves global.json from the *current directory*, not from
+    # the project path it is handed, so driving these from the repo root
+    # silently ignored the template's Microsoft.Testing.Platform opt-in and
+    # fell back to the VSTest bridge, which the .NET 10 SDK refuses outright.
+    # The failure named the MTP targets file, which reads as a template bug
+    # rather than as a working-directory one.
+    Push-Location $folder
+    try {
+        if ($selfContained) {
+            # No .slnx in ProjectOnly / Minimal mode — point dotnet at the
+            # csprojs directly.
+            Exec { dotnet build "src/$Name/$Name.csproj" -c Release } "dotnet build failed for $Name (plugin)"
+            Exec { dotnet test --project "tests/$Name.Tests/$Name.Tests.csproj" -c Release } "dotnet test failed for $Name (tests)"
+        }
+        else {
+            Exec { dotnet build "$Name.slnx" -c Release } "dotnet build failed for $Name"
+            Exec { dotnet test --solution "$Name.slnx" -c Release --no-build } "dotnet test failed for $Name"
+        }
     }
-    else {
-        Exec { dotnet build "$folder" -c Release } "dotnet build failed for $Name"
-        Exec { dotnet test  "$folder" -c Release --no-build } "dotnet test failed for $Name"
+    finally {
+        Pop-Location
     }
 
     # Prove the generated plugin packs cleanly — catches missing Authors /
