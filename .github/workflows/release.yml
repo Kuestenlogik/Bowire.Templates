@@ -27,12 +27,23 @@ jobs:
           dotnet-version: '10.0.x'
           dotnet-quality: preview
 
-      - name: Inject release notes + version
+      # The tag is the version. build.ps1 also writes a VersionPrefix
+      # into the csproj, taken from the newest RELEASE_NOTES.md heading,
+      # and that heading is only touched on a feature release — so every
+      # cascade tag from v1.1.1 to v1.1.16 packed 1.1.0 again and
+      # --skip-duplicate dropped it without a word. Fifteen green
+      # releases that published nothing. Keep build.ps1 for the notes,
+      # take the version from the ref, the way every sibling does.
+      - name: Resolve version from tag
+        id: version
+        run: echo "VERSION=${GITHUB_REF_NAME#v}" >> $GITHUB_OUTPUT
+
+      - name: Inject release notes
         shell: pwsh
         run: ./build.ps1
 
       - name: dotnet pack
-        run: dotnet pack -c Release -o output
+        run: dotnet pack -c Release -o output -p:Version=${{ steps.version.outputs.VERSION }}
 
       # Gated on non-RC tags so `v*-rc*` exercises the full pipeline as
       # a dry run without permanently publishing a package version.

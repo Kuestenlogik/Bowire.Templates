@@ -64,7 +64,7 @@ Bowire 1.6.0 documents four extension contracts (`IBowireProtocol`, `IBowireCliC
 
 ## Maintenance
 
-- [x] **2026-09-17** — `--BowireSdkVersion` defaults to the range `2.*` again instead of a pin, and the ProjectOnly/Minimal output finally honours the parameter at all (it carried a literal beside the token and silently ignored what you passed). A pinned default had to be kept current by hand or by cascade, and was not: it sat at `1.6.0` for months, and the cascade's merged bump to `2.7.0` was later lost to a rewrite of `main`. A range resolves at restore time and still packs a concrete floor, so nothing downstream changes. See [SDK version](docs/BowirePluginTemplate.md#sdk-version).
+- [x] **2026-09-17** — `--BowireSdkVersion` defaults to the range `2.7.*` instead of a pin, the release cascade now moves that line itself on a new minor, and the ProjectOnly/Minimal output finally honours the parameter at all (it carried a literal beside the token and silently ignored what you passed). A pinned default had to be kept current by hand, and was not: it sat at `1.6.0` for months, and the cascade's merged bump to `2.7.0` was later lost to a rewrite of `main`. A range resolves at restore time and still packs a concrete floor, so nothing downstream changes. See [SDK version](docs/BowirePluginTemplate.md#sdk-version).
 - [x] **2026-05-25** — bumped `--BowireSdkVersion` default in `template.json` from `1.3.*` to `1.6.0` (tracking the current `Kuestenlogik.Bowire` release line + compatibility-matrix floor).
 - [x] **2026-05-13** — bumped `--BowireSdkVersion` default in `template.json` from `0.9.*` to `1.3.*` (tracking current Bowire 1.3.x release line); updated the matching comment in `Directory.Packages.props` and the parameter table in `docs/BowirePluginTemplate.md`.
 
@@ -75,7 +75,7 @@ Bowire 1.6.0 documents four extension contracts (`IBowireProtocol`, `IBowireCliC
 
 ## Planned / nice-to-have
 
-- [x] **Bowire-SDK-version auto-bump** — dropped rather than built. The floating default (`2.*`, 2026-09-17) makes a per-minor bump unnecessary: the range picks up every new minor at restore time without anyone writing a version down. What is left is one manual move per major (`2.*` → `3.*`), which a cron job watching for a newer version would not have caught anyway — the release cascade deliberately declines to overwrite a range.
+- [x] **Bowire-SDK-version auto-bump** — done, but in the cascade rather than as the planned cron job. The floating default (`2.7.*`, 2026-09-17) picks up every patch at restore time without anyone writing a version down, and `bowire-released.yml` moves the minor line when a minor ships. A cron job polling nuget.org would have duplicated what the release dispatch already knows.
 - [ ] **ID-prefix reservation for `KL.*`** — request from nuget.org once the first package in the namespace is published.
 - [ ] **Author-signing** — optional; only if a Sectigo / DigiCert cert or Azure Trusted Signing subscription is available. Repository-signature via nuget.org covers authenticity in the meantime.
 - [ ] **Broader Bowire auto-discovery** (upstream, not in this repo) — Bowire currently only scans assemblies whose name contains `"Bowire"`. A PR against the main Bowire repo to also accept an `[assembly: BowirePluginAssembly]` attribute (or similar marker) would let plugin authors pick any package name without losing auto-registration. Documented in the integration-tests scaffold as a known sharp edge until then.
