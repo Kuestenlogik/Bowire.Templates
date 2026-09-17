@@ -33,9 +33,17 @@
        and this group evaluates away. Stating it as an MSBuild condition
        rather than a template conditional is also what keeps this file
        restorable as template source, where every branch is present at
-       once and two Includes of one package are NU1504. -->
+       once and two Includes of one package are NU1504.
+
+       The Bowire version is the template parameter, not a literal. A
+       literal here was a second place to keep current, and it was not
+       kept: the ProjectOnly output ignored BowireSdkVersion and pinned
+       whatever the last cascade had written. The cascade reaches this
+       through the parameter instead. It bumps the symbol whose
+       `replaces` token Directory.Packages.props carries, and its sed
+       declines to touch a Version that does not start with a digit. -->
   <ItemGroup Condition="'$(ManagePackageVersionsCentrally)' != 'true'">
-    <PackageReference Update="Kuestenlogik.Bowire" Version="2.6.2" />
+    <PackageReference Update="Kuestenlogik.Bowire" Version="MY_BOWIRE_VERSION" />
     <!--#if (Preset == "mqtt") -->
     <PackageReference Update="MQTTnet" Version="5.1.0.1559" />
     <!--#endif -->

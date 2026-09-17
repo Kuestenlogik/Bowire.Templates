@@ -171,7 +171,7 @@
     "BowireSdkVersion": {
       "type": "parameter",
       "datatype": "string",
-      "defaultValue": "2.6.2",
+      "defaultValue": "2.7.0",
       "replaces": "MY_BOWIRE_VERSION",
       "description": "Version range of the Kuestenlogik.Bowire NuGet package (the Bowire SDK) this plugin references — also the host-Bowire floor your plugin will demand."
     },
