@@ -43,7 +43,7 @@ Contoso.Bowire.Protocol.Foo/
 | `--Preset`               | `none`             | Seed `DiscoverAsync`/`InvokeAsync` with a realistic starting point for a specific transport. One of `none` / `rest` / `mqtt` / `websocket` / `grpc` / `signalr`. See [Presets](#presets). |
 | `--IconSvg`              | demo circle        | Raw SVG markup embedded in the generated `IconSvg` property (what Bowire shows on the protocol tab). Pass your own `<svg>...</svg>` string. |
 | `--Minimal`              | `false`            | Shortcut: implies `--ProjectOnly true --IncludeCI false --IncludeIntegrationTests false`. Produces the smallest possible plugin output (plugin csproj + unit-test csproj, no solution, no build-props, no CI). |
-| `--BowireSdkVersion`    | `2.7.*`            | Version range of the `Kuestenlogik.Bowire` NuGet package (the Bowire SDK) this plugin references — also the host-Bowire floor your plugin will demand. See [SDK version](#sdk-version). |
+| `--BowireSdkVersion`    | `2.*`              | Version range of the `Kuestenlogik.Bowire` NuGet package (the Bowire SDK) this plugin references — also the host-Bowire floor your plugin will demand. See [SDK version](#sdk-version). |
 | `--IncludeCI`            | `true`             | Include a GitHub Actions workflow that builds, tests, and packs the plugin. |
 | `--IncludeDuplexChannel` | `false`            | Scaffold a full `IBowireChannel` echo demo for bidirectional / duplex protocols. |
 | `--IncludeIntegrationTests` | `false`         | Scaffold a second test project (`<Name>.IntegrationTests`) that hosts the plugin in an ASP.NET Core `TestServer` with `AddBowire()` / `MapBowire()` and hits `/bowire/api/protocols` + `/bowire/api/services` over HTTP. Requires the plugin project name to contain `Bowire` (e.g. `Contoso.Bowire.Protocol.Foo`) — Bowire's auto-discovery only scans assemblies whose name contains that substring. |
@@ -51,28 +51,34 @@ Contoso.Bowire.Protocol.Foo/
 
 ### SDK version
 
-The default is a **range**, `2.7.*`, not a pin: a scaffold references the
-newest patch of Bowire's current minor line, whenever "now" is. That is
-deliberate. A pinned default is a second place the current version has to be
-written down, and it went stale twice — once sitting five minors behind for
-months, once when a release cascade's merged bump was lost to a history
-rewrite. Neither was visible from the generated project, which built fine
-against the old SDK.
+The default is a **range**, `2.*`, not a pin: a scaffold references the newest
+`Kuestenlogik.Bowire` in major 2, whenever "now" is. Under SemVer that is
+exactly the set of releases that stay backwards compatible — MINOR is
+"new, backwards compatible functionality", PATCH is backwards-compatible
+fixes, and only MAJOR may break you. So the range is as wide as it can be
+without ever handing you an incompatible SDK.
 
-The line itself is not manual either: when a new minor ships, the release
-cascade moves the default from `2.7.*` to `2.8.*` and leaves patch releases
-alone, because the range already covers them. Wider ranges (`2.*`) and
-bracketed ones (`[2.0,3.0)`) are treated as a deliberate statement about how
-far you are willing to float and are never narrowed.
+That is deliberate. A pinned default is a second place the current version has
+to be written down, and it went stale twice — once sitting five minors behind
+for months, once when a release cascade's merged bump was lost to a history
+rewrite. Neither was visible from the generated project, which built fine
+against the old SDK. A range has nothing to keep current: the release cascade
+never rewrites one, because how far to float is the operator's call, not the
+automation's.
 
 Nothing is lost by floating. The range is resolved at restore time, and
 `dotnet pack` writes whatever it resolved to into your plugin's own nuspec as
 a concrete floor — `<dependency id="Kuestenlogik.Bowire" version="2.7.0" />`,
-not `2.7.*`. Consumers of your plugin see a normal dependency.
+not `2.*`. Consumers of your plugin see a normal dependency.
 
-One thing to know: **scaffolding is not reproducible.** The same command on
-two days can give two SDK versions. Pass `--BowireSdkVersion 2.7.0` when that
-matters — a pin behaves exactly as it always did.
+Two things to know:
+
+- **Scaffolding is not reproducible.** The same command on two days can give
+  two SDK versions. Pass `--BowireSdkVersion 2.7.0` when that matters — a pin
+  behaves exactly as it always did, and the cascade keeps a pin current.
+- **A new major is a manual move** to `3.*`, once per major. Narrower ranges
+  such as `2.7.*` work too and are left alone by the cascade just the same;
+  they simply need that move once per minor instead.
 
 ## What the scaffold does out of the box
 

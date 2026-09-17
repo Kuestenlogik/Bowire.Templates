@@ -171,9 +171,9 @@
     "BowireSdkVersion": {
       "type": "parameter",
       "datatype": "string",
-      "defaultValue": "2.7.*",
+      "defaultValue": "2.*",
       "replaces": "MY_BOWIRE_VERSION",
-      "description": "Version range of the Kuestenlogik.Bowire NuGet package (the Bowire SDK) this plugin references — also the host-Bowire floor your plugin will demand. The default tracks the current minor line and floats across its patches, so a scaffold is never generated against a stale SDK; the release cascade moves the line itself when a new minor ships. The plugin still packs a concrete floor, whatever the range resolved to at build time. Pass a pin such as 2.7.0 when you need the same scaffold twice."
+      "description": "Version range of the Kuestenlogik.Bowire NuGet package (the Bowire SDK) this plugin references — also the host-Bowire floor your plugin will demand. The default floats across the whole major, which under SemVer is everything that stays backwards compatible, so a scaffold is never generated against a stale SDK and nobody has to keep a version written down. The plugin still packs a concrete floor, whatever the range resolved to at build time. Pass a pin such as 2.7.0 when you need the same scaffold twice."
     },
     "IncludeCI": {
       "type": "parameter",
