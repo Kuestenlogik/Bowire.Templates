@@ -43,11 +43,36 @@ Contoso.Bowire.Protocol.Foo/
 | `--Preset`               | `none`             | Seed `DiscoverAsync`/`InvokeAsync` with a realistic starting point for a specific transport. One of `none` / `rest` / `mqtt` / `websocket` / `grpc` / `signalr`. See [Presets](#presets). |
 | `--IconSvg`              | demo circle        | Raw SVG markup embedded in the generated `IconSvg` property (what Bowire shows on the protocol tab). Pass your own `<svg>...</svg>` string. |
 | `--Minimal`              | `false`            | Shortcut: implies `--ProjectOnly true --IncludeCI false --IncludeIntegrationTests false`. Produces the smallest possible plugin output (plugin csproj + unit-test csproj, no solution, no build-props, no CI). |
-| `--BowireSdkVersion`    | latest release     | Version range of the `Kuestenlogik.Bowire` NuGet package (the Bowire SDK) this plugin references — also the host-Bowire floor your plugin will demand. |
+| `--BowireSdkVersion`    | `2.*`              | Version range of the `Kuestenlogik.Bowire` NuGet package (the Bowire SDK) this plugin references — also the host-Bowire floor your plugin will demand. See [SDK version](#sdk-version). |
 | `--IncludeCI`            | `true`             | Include a GitHub Actions workflow that builds, tests, and packs the plugin. |
 | `--IncludeDuplexChannel` | `false`            | Scaffold a full `IBowireChannel` echo demo for bidirectional / duplex protocols. |
 | `--IncludeIntegrationTests` | `false`         | Scaffold a second test project (`<Name>.IntegrationTests`) that hosts the plugin in an ASP.NET Core `TestServer` with `AddBowire()` / `MapBowire()` and hits `/bowire/api/protocols` + `/bowire/api/services` over HTTP. Requires the plugin project name to contain `Bowire` (e.g. `Contoso.Bowire.Protocol.Foo`) — Bowire's auto-discovery only scans assemblies whose name contains that substring. |
 | `--ProjectOnly`          | `false`            | Emit only `src/` and `tests/` — skip `.slnx`, `Directory.Build.props`, `Directory.Packages.props`, `.gitignore`, `README.md` and `.github/`. See [Adding to an existing monorepo](#adding-to-an-existing-monorepo). |
+
+### SDK version
+
+The default is a **range**, `2.*`, not a pin: a scaffold generated today
+references the newest `Kuestenlogik.Bowire` in major 2, whenever today is.
+That is deliberate. A pinned default is a second place the current version
+has to be written down, and it went stale twice — once sitting five minors
+behind for months, once when a release cascade's merged bump was lost to a
+history rewrite. Neither was visible from the generated project, which built
+fine against the old SDK.
+
+Nothing is lost by floating. The range is resolved at restore time, and
+`dotnet pack` writes whatever it resolved to into your plugin's own nuspec as
+a concrete floor — `<dependency id="Kuestenlogik.Bowire" version="2.7.0" />`,
+not `2.*`. Consumers of your plugin see a normal dependency.
+
+Two things to know:
+
+- **Scaffolding is not reproducible.** The same command on two days can give
+  two SDK versions. Pass `--BowireSdkVersion 2.7.0` when that matters — a
+  pin behaves exactly as it always did.
+- **A new major is a manual step.** The release cascade deliberately leaves
+  ranges alone (a range is the operator's choice, not a value to overwrite),
+  so when Bowire 3.0 ships, this default has to be moved to `3.*` by hand.
+  Once per major, rather than once per minor.
 
 ## What the scaffold does out of the box
 

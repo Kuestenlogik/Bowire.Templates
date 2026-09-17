@@ -1,11 +1,12 @@
 <Project>
   <PropertyGroup>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
-    <!-- Allow MY_BOWIRE_VERSION (the BowireSdkVersion template
-         parameter, whose default is declared once, in
-         .template.config/template.json) to be either a fixed pin or
-         a floating range like "2.6.*". Without this, CPM rejects any
-         version containing '*' with NU1011. -->
+    <!-- MY_BOWIRE_VERSION is the BowireSdkVersion template parameter,
+         whose default is declared once, in
+         .template.config/template.json. That default is a floating
+         range, which makes this load-bearing rather than
+         precautionary: without it CPM rejects any version containing
+         '*' with NU1011. -->
     <CentralPackageFloatingVersionsEnabled>true</CentralPackageFloatingVersionsEnabled>
   </PropertyGroup>
   <ItemGroup>
