@@ -15,18 +15,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <!--#if (ProjectOnly || Minimal) -->
-    <PackageReference Include="Kuestenlogik.Bowire" Version="2.6.2" />
-    <!--#if (Preset == "mqtt") -->
-    <PackageReference Include="MQTTnet" Version="5.1.0.1559" />
-    <!--#endif -->
-    <!--#if (Preset == "grpc") -->
-    <PackageReference Include="Grpc.Net.Client" Version="2.80.0" />
-    <!--#endif -->
-    <!--#if (Preset == "signalr") -->
-    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="10.0.7" />
-    <!--#endif -->
-    <!--#else -->
     <PackageReference Include="Kuestenlogik.Bowire" />
     <!--#if (Preset == "mqtt") -->
     <PackageReference Include="MQTTnet" />
@@ -37,6 +25,25 @@
     <!--#if (Preset == "signalr") -->
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" />
     <!--#endif -->
+  </ItemGroup>
+
+  <!-- Versions for the ProjectOnly / Minimal output, which has no
+       Directory.Packages.props of its own. Where central package
+       management is on, Directory.Packages.props is the single source
+       and this group evaluates away. Stating it as an MSBuild condition
+       rather than a template conditional is also what keeps this file
+       restorable as template source, where every branch is present at
+       once and two Includes of one package are NU1504. -->
+  <ItemGroup Condition="'$(ManagePackageVersionsCentrally)' != 'true'">
+    <PackageReference Update="Kuestenlogik.Bowire" Version="2.6.2" />
+    <!--#if (Preset == "mqtt") -->
+    <PackageReference Update="MQTTnet" Version="5.1.0.1559" />
+    <!--#endif -->
+    <!--#if (Preset == "grpc") -->
+    <PackageReference Update="Grpc.Net.Client" Version="2.80.0" />
+    <!--#endif -->
+    <!--#if (Preset == "signalr") -->
+    <PackageReference Update="Microsoft.AspNetCore.SignalR.Client" Version="10.0.7" />
     <!--#endif -->
   </ItemGroup>
 
