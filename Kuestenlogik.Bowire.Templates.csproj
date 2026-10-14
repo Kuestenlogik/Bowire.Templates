@@ -27,7 +27,6 @@
     <ContentTargetFolders>content</ContentTargetFolders>
     <EnableDefaultItems>false</EnableDefaultItems>
     <NoDefaultExcludes>true</NoDefaultExcludes>
-    <NoWarn>$(NoWarn);NU5128</NoWarn>
     <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
   </PropertyGroup>
 

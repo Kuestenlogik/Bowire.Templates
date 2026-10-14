@@ -29,6 +29,8 @@
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <!-- The XML docs ship for IntelliSense; CS1591 stays off so a freshly scaffolded
+         plugin (warnings as errors) builds before every public member is documented. -->
     <NoWarn>$(NoWarn);CS1591</NoWarn>
   </PropertyGroup>
 
