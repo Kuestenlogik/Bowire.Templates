@@ -51,7 +51,7 @@
     <PackageReference Update="Grpc.Net.Client" Version="2.80.0" />
     <!--#endif -->
     <!--#if (Preset == "signalr") -->
-    <PackageReference Update="Microsoft.AspNetCore.SignalR.Client" Version="10.0.7" />
+    <PackageReference Update="Microsoft.AspNetCore.SignalR.Client" Version="10.0.13" />
     <!--#endif -->
   </ItemGroup>
 
